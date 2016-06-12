@@ -1,0 +1,102 @@
+README
+
+
+The accompanying program "fstabxref"  takes a /etc/fstab table similar to TABLE ONE
+listed below, It reads the UUID values, looks up the corresponding hardware device address
+and appends that information as a comment to the end of the UUID line.
+It also knows how to format the LABEL Line
+Refer to TABLE TWO below for an example of an output of the program.
+
+The program takes  take zero, one or two arguments.
+
+By design, the fstabxref  program will not write to /etc/fstab.
+Do not use redirection to force overwrite of /etc/fstab
+
+The program has a few options.
+
+OPTION ONE  No arguments
+fstabxref will read  /etc/fstab and display its results to standard output (terminal),
+the cross referenced lookup.   Use it this way as
+	
+		fstabxref > /tmp/fstab   or fstabxref | vi - 
+
+OPTION TWO
+Copy /etc/fstab to some other location eg, /tmp 
+Redirect input to the other fstab copy 
+
+		fstabxref -i some_fstab_copy  > /tmp/fstab         
+or   		fstabxref -i  some_fstab_copy  | vi -  
+or 		fstabxref -i  some_fstab_copy  | less
+
+
+OPTION THREE
+You can redirect output to a file other than /etc/fstab
+
+		fstabxref -o  /tmp/fstab_copy            
+ 
+OPTION FOUR
+You an do both select input and output:
+
+	fstabxref  -i some_fstab_file  -o xrefed_fstab	
+or	fstablsblk -i some_fstab_file  -o xrefed_fstab 
+
+Note the ntfs UUID and the ntfs LABEL=  These were contrived to show the formatting with
+variable sized UUID values
+TABLE ONE  --Before
+=============================================================================================================
+#
+# /etc/fstab
+# Created by anaconda on Thu Mar  3 03:43:36 2016
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+#<file system>				 <mount>		   <type>   <options>         <dump> <pass>
+            UUID=5FBD7164754805FF /windata  ntfs defaults,noatime  1     1         
+LABEL=DoNotDeleteMe /windata ntfs defaults,noatime    1   1         
+UUID=e825a1b2-fc60-46ee-be03-8a7f4444c5b4 /                         ext4    defaults,noatime	1 1 
+UUID=cb1cbb1a-a311-4860-b6dd-060dc88aa330 /boot                     ext4    defaults,noatime	1 2 
+UUID=e387b85b-766f-4572-8ab1-e9699c38ac88 /home                     xfs     defaults,noatime	0 0 
+UUID=d8b32a2f-7022-4b1a-a3b7-603721b51882 swap                      swap    defaults,noatime	0 0 
+UUID=6e488205-8791-41c2-8043-5051f8d0b185 /scratch                  ext4    defaults,noatime	1 2 
+UUID=e09c1a4b-142f-48e8-a538-60b27f169be2 /scratch1                 ext4    defaults,noatime	1 2 
+UUID=6c830a28-b62e-429c-bc36-988e3cb2c768 /sdd1spare                xfs     defaults,noatime	1 2 
+
+LABEL=sde1Spare                           /Development              xfs     defaults,noatime	1 2 
+#UUID=9f9d9bb3-2c94-4264-8604-1f887ee62696 /scratch2                ext4   defaults,noatime	1 2  
+#UUUID=923a26b2-81e5-40d2-93a7-882e3aadbe2f /scratch1 		    xfs	   defaults,noatime	1 2 
+================================================================================================================
+
+
+TABLE TWO  (result)
+================================================================================================================
+#
+# /etc/fstab
+# Created by anaconda on Thu Mar  3 03:43:36 2016
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+#<file system>				 <mount>		   <type>   <options>          <dump> <pass>
+UUID=5FBD7164754805FF 			  /windata                  ntfs    defaults,noatime	1 1 #/dev/sda4
+LABEL=DoNotDeleteMe                       /windata                  ntfs    defaults,noatime	1 1 #/dev/sda4
+UUID=e825a1b2-fc60-46ee-be03-8a7f4444c5b4 /                         ext4    defaults,noatime	1 1 #/dev/sde4
+UUID=cb1cbb1a-a311-4860-b6dd-060dc88aa330 /boot                     ext4    defaults,noatime	1 2 #/dev/sde3
+UUID=e387b85b-766f-4572-8ab1-e9699c38ac88 /home                     xfs     defaults,noatime	0 0 #/dev/sde5
+UUID=d8b32a2f-7022-4b1a-a3b7-603721b51882 swap                      swap    defaults,noatime	0 0 #/dev/sde6
+UUID=6e488205-8791-41c2-8043-5051f8d0b185 /scratch                  ext4    defaults,noatime	1 2 #/dev/sdb2
+UUID=e09c1a4b-142f-48e8-a538-60b27f169be2 /scratch1                 ext4    defaults,noatime	1 2 #/dev/sdd2
+UUID=6c830a28-b62e-429c-bc36-988e3cb2c768 /sdd1spare                xfs     defaults,noatime	1 2 #/dev/sdd1
+
+LABEL=sde1Spare                           /Development              xfs     defaults,noatime	1 2 #/dev/sde1
+#UUID=9f9d9bb3-2c94-4264-8604-1f887ee62696 /scratch2                ext4   defaults,noatime	1 2  
+#UUUID=923a26b2-81e5-40d2-93a7-882e3aadbe2f /scratch1 		    xfs	   defaults,noatime	1 2 
+=================================================================================================================
+
+Leslie Satenstein
+May 22, 2016
+leslie.satenstein@yahoo.com
+lsatenstein@yahoo.com
+leslie.satenstein@gmail.com
+
+
